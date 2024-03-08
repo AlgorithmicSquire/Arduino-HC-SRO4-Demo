@@ -1,0 +1,53 @@
+int trigpin = 7;
+int echoPin = 8;
+#define LED 5
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);  
+pinMode(trigpin, OUTPUT);
+pinMode(echoPin, INPUT);
+pinMode(LED, OUTPUT);
+digitalWrite(LED, LOW);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+long duration, inches, cm;
+
+
+digitalWrite(trigpin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigpin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigpin, LOW);
+
+
+
+duration = pulseIn(echoPin, HIGH);
+
+inches = microsecondsToInches(duration);
+cm = microsecondsToCentimeters(duration);
+
+
+Serial.print(inches);
+Serial.print("in, ");
+Serial.print(cm);
+Serial.print("cm");
+Serial.println();
+if (cm < 30) {
+    digitalWrite(LED, HIGH); // Turn on LED if distance is less than 30 cm
+  } else {
+    digitalWrite(LED, LOW); // Turn off LED if distance is 30 cm or more
+  }
+  
+Serial.println();
+delay(10);
+
+}
+long microsecondsToInches(long microseconds){
+  return microseconds / 74 / 2;
+}
+long microsecondsToCentimeters(long microseconds){
+  return microseconds / 29 / 2;
+}
+
